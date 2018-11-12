@@ -49,7 +49,7 @@ def main():
                         help="jitter in the record length")
     parser.add_argument("-f", "--jitterrate",
                         default=0,
-                        type=int,
+                        type=float,
                         help="jitter in the record rate")
 
     args = parser.parse_args()
@@ -75,7 +75,10 @@ def main():
         print(formatstr % (time_now))
         if i % max(5, args.number / 50) == 0:
             progress(i, args.number,       status='{:,d} records @ {:,.2f} rps. Total bytes: {:,d}'.format(i, float(i) / (time_now - time_start), bytecount) )
-        high_resolution_sleep(waittime)
+        if args.jitterrate != 0:
+            high_resolution_sleep(random.uniform(waittime * (1-args.jitterrate/args.rate), waittime * (1+args.jitterrate/args.rate) ))
+        else:
+            high_resolution_sleep(waittime)
     progress(args.number, args.number, status='{:,d} records @ {:,.2f} rps. Total bytes: {:,d}'.format(args.number, float(args.number) / (time_now - time_start), bytecount) )
     print("\n%s ended" % (myName), file=sys.stderr)
 
