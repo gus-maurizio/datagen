@@ -13,6 +13,7 @@ Usage:
 datagen.bash [record_length|1024] [number_of_records|1000] [rate|100]
 ```
 For instance, `./datagen.bash 1512 3000 250` will generate 3,000 records of 1,512 bytes (each record terminated by newline '\n') at 250 records per second.
+You can check the [output and progress bar here](https://gfycat.com/GiddyOfficialAvocet).
 
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
