@@ -27,7 +27,7 @@ LINUX=false
 $MACOSX && datecmd="gdate"
 $LINUX  && datecmd="date"
 # iterate and create the records to be sent to stdout into pv for rate management
->&2 echo "$0 will generate $numrecs records of $reclen size at $rate messages per second"
+>&2 echo "$0 will generate $numrecs records of $reclen bytes at $rate records per second"
 for i in $(seq 1 $numrecs)
 do
   # get the time as part of the body of the message
