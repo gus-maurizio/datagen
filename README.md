@@ -14,7 +14,7 @@ datagen.bash [record_length|1024] [number_of_records|1000] [rate|100]
 ```
 For instance, `./datagen.bash 1512 3000 250` will generate 3,000 records of 1,512 bytes (each record terminated by newline '\n') at 250 records per second.
 
-![output from command](/images/images/Screen_Shot_datagen.png?raw=true "Output from datagen.bash").
+![output from command](Screen_Shot_datagen.png).
 
 You can check the [output and progress bar here](https://gfycat.com/GiddyOfficialAvocet).
 
