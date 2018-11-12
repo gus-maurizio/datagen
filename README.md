@@ -37,16 +37,12 @@ In order to use it you need, python!
 usage: datagen.py [-h] [-n NUMBER] [-l LENGTH] [-j JITTERLEN] [-r RATE] [-f JITTERRATE]
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -n NUMBER, --number NUMBER
-                        number of records (default: 10)
-  -l LENGTH, --length LENGTH
-                        record length (default: 100)
-  -j JITTERLEN, --jitterlen JITTERLEN
-                        jitter in the record length (default: 0)
-  -r RATE, --rate RATE  record rate in records per second (default: 1)
-  -f JITTERRATE, --jitterrate JITTERRATE
-                        jitter in the record rate (default: 0)
+  -h, --help                                show this help message and exit
+  -n NUMBER, --number NUMBER                number of records (default: 10)
+  -l LENGTH, --length LENGTH                record length (default: 100)
+  -j JITTERLEN, --jitterlen JITTERLEN       jitter in the record length (default: 0)
+  -r RATE, --rate RATE                      record rate in records per second (default: 1)
+  -f JITTERRATE, --jitterrate JITTERRATE    jitter in the record rate (default: 0)
 ```
 
 
