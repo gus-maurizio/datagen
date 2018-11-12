@@ -8,15 +8,28 @@ a bash script, and a python program.
 In order to use it, some prerequisite components are needed:
 - Pipe Viewer tool (`pv`).
 - For Mac OS X the gnu version of date (`gdate`) that can be installed using `brew install coreutils`.
+Each data record generated has the specified length, ends with a '\n' newline character, and is composed
+of a right-aligned, left-padded with zeroes, floating point number representing the Unix timestamp with nanosecond precision.
+
 Usage:
 ```
 datagen.bash [record_length|1024] [number_of_records|1000] [rate|100]
 ```
-For instance, `./datagen.bash 1512 3000 250` will generate 3,000 records of 1,512 bytes (each record terminated by newline '\n') at 250 records per second.
+For instance, `./datagen.bash 1512 3000 250` will generate 3,000 records of 1,512 bytes (each record terminated by newline '\n') at 250 records per second:
 
-![output from command](Screen_Shot_datagen.png).
+![output from command](Screen_Shot_datagen.png)
 
 You can check the [output and progress bar here](https://gfycat.com/GiddyOfficialAvocet).
+
+##### Limitations of the Linux version
+A couple of things worth noting: First, the rate is managed by the `pv` utility and is approximate at best.
+Secondly, the records generated are paced by the `pv` utility, and the timestamp in the record does not match
+the actual time it was released by pv to the downstream consumers. As you can see below, the timestamp of each record is only 5 milliseconds apart for this command:
+```
+date +%s;./datagen.bash 40 10 1 2>/dev/null;date +%s
+```
+where we can see that each record is actually passed every second, but their timestamps are almost consecutive at the moment they were generated.
+![output from command](Screen_Shot_datagen_limitation.png)
 
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
