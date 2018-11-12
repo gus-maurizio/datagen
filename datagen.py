@@ -21,7 +21,7 @@ def progress(count, total, status=''):
     percents = round(100.0 * count / float(total), 1)
     bar = '=' * filled_len + '-' * (bar_len - filled_len)
 
-    sys.stderr.write('[%s] %6.2f%s ...%s\r' % (bar, percents, '%', status))
+    sys.stderr.write('>>> [{}] {:6.2f}{} ...{}\r'.format(bar, percents, '%', status))
     sys.stderr.flush() 
 
 
@@ -46,7 +46,7 @@ def main():
 
     args = parser.parse_args()
 
-    print("%s will generate %d records of %d bytes at %f records per second" % (myName, args.number, args.length, args.rate), file=sys.stderr)
+    print("{} will generate {:,} records of {} bytes at {:.2f} records per second".format(myName, args.number, args.length, args.rate), file=sys.stderr)
     ### get the actual format string, that will print time in Unix format with nanoseconds 
     formatlen = args.length - 1
     formatstr = "%0" + str(formatlen) + "f"
@@ -59,9 +59,9 @@ def main():
         time_now = time.time()
         print(formatstr % (time_now))
         if i % max(5, args.number / 50) == 0:
-            progress(i, args.number,       status='%10d rate %7.2f records per second' % (i, float(i) / (time_now - time_start)) )
+            progress(i, args.number,       status='{:,d} rate {:,.2f} records per second'.format(i, float(i) / (time_now - time_start)) )
         high_resolution_sleep(waittime)
-    progress(args.number, args.number, status='%10d records at an average rate of %7.2f records per second' % (args.number, float(args.number) / (time_now - time_start)) )
+    progress(args.number, args.number, status='{:,d} records at an average rate of {:,.2f} records per second'.format(args.number, float(args.number) / (time_now - time_start)) )
     print("\n%s ended" % (myName), file=sys.stderr)
 
 if __name__ == "__main__":
