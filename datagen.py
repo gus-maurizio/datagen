@@ -43,25 +43,40 @@ def main():
                         default=1,
                         type=float,
                         help="record rate in records per second")
+    parser.add_argument("-j", "--jitterlen",
+                        default=0,
+                        type=int,
+                        help="jitter in the record length")
+    parser.add_argument("-f", "--jitterrate",
+                        default=0,
+                        type=int,
+                        help="jitter in the record rate")
 
     args = parser.parse_args()
 
     print("{} will generate {:,} records of {} bytes at {:.2f} records per second".format(myName, args.number, args.length, args.rate), file=sys.stderr)
     ### get the actual format string, that will print time in Unix format with nanoseconds 
-    formatlen = args.length - 1
-    formatstr = "%0" + str(formatlen) + "f"
+    formatlen  = args.length - 1
+    formatlenj = formatlen
+    formatstr = "%0" + str(formatlenj) + "f"
     ### calculate the time between two successive records to be generated based on the record rate specified
     ### formula is simple, waittime = 1.0 / float(args.rate) 
     waittime   = 1.0 / args.rate
+    ### count the bytes actually sent
+    bytecount  = 0
     ### get the start time to compute rate
     time_start = time.time()
     for i in range(args.number):
         time_now = time.time()
+        if args.jitterlen != 0:
+            formatlenj = random.randint(formatlen - args.jitterlen, formatlen + args.jitterlen)
+        formatstr = "%0" + str(formatlenj) + "f"
+        bytecount += formatlenj + 1
         print(formatstr % (time_now))
         if i % max(5, args.number / 50) == 0:
-            progress(i, args.number,       status='{:,d} rate {:,.2f} records per second'.format(i, float(i) / (time_now - time_start)) )
+            progress(i, args.number,       status='{:,d} records @ {:,.2f} rps. Total bytes: {:,d}'.format(i, float(i) / (time_now - time_start), bytecount) )
         high_resolution_sleep(waittime)
-    progress(args.number, args.number, status='{:,d} records at an average rate of {:,.2f} records per second'.format(args.number, float(args.number) / (time_now - time_start)) )
+    progress(args.number, args.number, status='{:,d} records @ {:,.2f} rps. Total bytes: {:,d}'.format(args.number, float(args.number) / (time_now - time_start), bytecount) )
     print("\n%s ended" % (myName), file=sys.stderr)
 
 if __name__ == "__main__":
