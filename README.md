@@ -44,7 +44,7 @@ optional arguments:
   -r RATE, --rate RATE                      record rate in records per second (default: 1)
   -f JITTERRATE, --jitterrate JITTERRATE    jitter in the record rate (default: 0)
 ```
-
+![output from command](ScreenMovie-Pyton.gif)
 
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
