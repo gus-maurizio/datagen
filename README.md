@@ -31,6 +31,25 @@ date +%s;./datagen.bash 40 10 1 2>/dev/null;date +%s
 where we can see that each record is actually passed every second, but their timestamps are almost consecutive at the moment they were generated.
 ![output from command](Screen_Shot_datagen_limitation.png)
 
+### The Pythonic way: datagen.py
+In order to use it you need, python!
+```
+usage: datagen.py [-h] [-n NUMBER] [-l LENGTH] [-j JITTERLEN] [-r RATE] [-f JITTERRATE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n NUMBER, --number NUMBER
+                        number of records (default: 10)
+  -l LENGTH, --length LENGTH
+                        record length (default: 100)
+  -j JITTERLEN, --jitterlen JITTERLEN
+                        jitter in the record length (default: 0)
+  -r RATE, --rate RATE  record rate in records per second (default: 1)
+  -f JITTERRATE, --jitterrate JITTERRATE
+                        jitter in the record rate (default: 0)
+```
+
+
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
 While there are many open source and commercial tools available that solve many of the

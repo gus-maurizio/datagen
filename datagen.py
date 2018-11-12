@@ -29,7 +29,7 @@ def main():
     ### get the name of this script removing path information if present
     myName              = os.path.basename(os.path.splitext(sys.argv[0])[0])
     ### set defaults and a more easy to understand command line argument style
-    parser = argparse.ArgumentParser(description="datagen utility")
+    parser = argparse.ArgumentParser(description="datagen utility", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
     parser.add_argument("-n", "--number",
                         default=10,
@@ -39,14 +39,14 @@ def main():
                         default=100, 
                         type=int,
                         help="record length")
-    parser.add_argument("-r", "--rate",
-                        default=1,
-                        type=float,
-                        help="record rate in records per second")
     parser.add_argument("-j", "--jitterlen",
                         default=0,
                         type=int,
                         help="jitter in the record length")
+    parser.add_argument("-r", "--rate",
+                        default=1,
+                        type=float,
+                        help="record rate in records per second")
     parser.add_argument("-f", "--jitterrate",
                         default=0,
                         type=float,
