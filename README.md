@@ -1,2 +1,2 @@
 # datagen
-Utility to create data records at a specific rate for testing purposes
+## Utility to create data records at a specific rate for testing purposes
