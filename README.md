@@ -30,7 +30,7 @@ date +%s;./datagen.bash 40 10 1 2>/dev/null;date +%s
 ```
 where we can see that each record is actually passed every second, but their timestamps are almost consecutive at the moment they were generated.
 ![output from command](/images/Screen_Shot_datagen_limitation.png)
-
+The final limitation is related to the maximum rate that can be achieved. This will depend on the particular machine and it will rarely exceed a few hundred messages per second (about 250 in a 2018 iMac).
 ### The Pythonic way: datagen.py
 In order to use it you need, python!
 ```
