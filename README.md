@@ -17,7 +17,7 @@ datagen.bash [record_length|1024] [number_of_records|1000] [rate|100]
 ```
 For instance, `./datagen.bash 1512 3000 250` will generate 3,000 records of 1,512 bytes (each record terminated by newline '\n') at 250 records per second:
 
-![output from command](Screen_Shot_datagen.png)
+![output from command](/images/Screen_Shot_datagen.png)
 
 ![output from command](/images/ScreenMovie-bash.gif)
 
@@ -29,7 +29,7 @@ the actual time it was released by pv to the downstream consumers. As you can se
 date +%s;./datagen.bash 40 10 1 2>/dev/null;date +%s
 ```
 where we can see that each record is actually passed every second, but their timestamps are almost consecutive at the moment they were generated.
-![output from command](Screen_Shot_datagen_limitation.png)
+![output from command](/images/Screen_Shot_datagen_limitation.png)
 
 ### The Pythonic way: datagen.py
 In order to use it you need, python!
@@ -45,12 +45,12 @@ optional arguments:
   -f JITTERRATE, --jitterrate JITTERRATE    jitter in the record rate (default: 0)
 ```
 
-![output from command](ScreenMovie-python.gif)
+![output from command](/images/ScreenMovie-python.gif)
 We can easily verify that the challenges of the Linux (bash script) version are all fixed.
 The records are generated at the right time, which enables calculation of roundtrip times if the message body is kept intact
 (or enhanced without destroying information). The rate is fairly accurate, and we have introduced the concept of jitter
 both for the length of the records, and the generation frequency.
-![output from command](Screen_Shot_python.png)
+![output from command](/images/Screen_Shot_python.png)
 
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
