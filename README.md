@@ -2,7 +2,7 @@
 ##### Utility to create data records at a specific rate for testing purposes
 ## TL;DR
 A tool to generate unique records of a given length and at a given rate expressed in
-records per second. Comes in two basic flavors (a golang version is on the works),
+records per second. Comes in two basic flavors (a golang version is in the works),
 a bash script, and a python program.
 ### The Linux way: datagen.bash
 In order to use it, some prerequisite components are needed:
