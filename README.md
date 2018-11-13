@@ -52,6 +52,30 @@ The records are generated at the right time, which enables calculation of roundt
 both for the length of the records, and the generation frequency.
 ![output from command](/images/Screen_Shot_python.png)
 
+#### Performance of the Pythonic version
+In order to show the capability of the Pythonic version, we will use the following simulation of a UDP message server.
+We will start a UDP server listening on port 9999 in the host, that will read each message received and pass it down to the `wc` (word count) utility. The server will stop listening after 5 seconds of inactivity.
+In order to simplify, we will leverage the netcat (nc) utility (the `-l` flag starts netcat in server mode). The Pipe View utility (in line mode with the `-l` flag) will count the effective message rate.
+```
+nc -w 5 -u -l  127.0.0.1 9999 | \
+pv -l | \
+wc
+```
+As a client or message producer, we will use `datagen.py` and pass the output to netcat operating in client mode. We ask netcat to stop if it does not detect any response back in 1 second.
+```
+./datagen.py -n 100000 -l 1536 -r 9000 | \
+pv -l | \
+nc -w 1 -u 127.0.0.1 9999
+```
+We can see that effectively the rate of 8,000 messages per second is achieved. We can run multiple instances of this (single threaded) implementation for an aggregate message rate of about 30,000 mps.
+```bash
+./datagen.py -n 100000 -l 1536 -r 9000 | pv -l |nc -w 1 -u 127.0.0.1 9999
+datagen will generate 100,000 records of 1,536 [+/- 0]  bytes at 9,000.00 [+/- 0.00] records per second
+>>> [============================================================] 100.00% ...100,000 @8,014.48 rps. Bytes: 153,600,000 <1,536.00>                      ]
+datagen ended
+ 100k 0:00:12 [7.99k/s] [                                <=>                                                                                            ]
+```
+
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
 While there are many open source and commercial tools available that solve many of the
