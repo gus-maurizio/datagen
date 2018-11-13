@@ -67,6 +67,7 @@ As a client or message producer, we will use `datagen.py` and pass the output to
 pv -l | \
 nc -w 1 -u 127.0.0.1 9999
 ```
+![output from command](/images/ScreenMovie-performace.gif)
 We can see that effectively the rate of 8,000 messages per second is achieved. We can run multiple instances of this (single threaded) implementation for an aggregate message rate of about 30,000 mps.
 ```bash
 ./datagen.py -n 100000 -l 1536 -r 9000 | pv -l |nc -w 1 -u 127.0.0.1 9999
