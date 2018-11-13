@@ -19,7 +19,7 @@ For instance, `./datagen.bash 1512 3000 250` will generate 3,000 records of 1,51
 
 ![output from command](Screen_Shot_datagen.png)
 
-You can check the [output and progress bar here](https://gfycat.com/GiddyOfficialAvocet).
+![output from command](ScreenMovie-bash.gif)
 
 #### Limitations of the Linux version
 A couple of things worth noting: First, the rate is managed by the `pv` utility and is approximate at best.
