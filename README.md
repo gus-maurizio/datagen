@@ -46,6 +46,11 @@ optional arguments:
 ```
 
 ![output from command](ScreenMovie-python.gif)
+We can easily verify that the challenges of the Linux (bash script) version are all fixed.
+The records are generated at the right time, which enables calculation of roundtrip times if the message body is kept intact
+(or enhanced without destroying information). The rate is fairly accurate, and we have introduced the concept of jitter
+both for the length of the records, and the generation frequency.
+![output from command](Screen_Shot_python.png)
 
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
