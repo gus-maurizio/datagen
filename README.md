@@ -2,8 +2,8 @@
 ##### Utility to create data records at a specific rate for testing purposes
 ## TL;DR
 A tool to generate unique records of a given length and at a given rate expressed in
-records per second. Comes in two basic flavors (a golang version is in the works),
-a bash script, and a python program.
+records per second. Comes in three basic flavors (a golang version has been added),
+a bash script, a go and a python programs.
 ### The Linux way: datagen.bash
 In order to use it, some prerequisite components are needed:
 - Pipe Viewer tool (`pv`).
@@ -75,6 +75,20 @@ datagen will generate 100,000 records of 1,536 [+/- 0]  bytes at 9,000.00 [+/- 0
 >>> [============================================================] 100.00% ...100,000 @8,014.48 rps. Bytes: 153,600,000 <1,536.00>                      ]
 datagen ended
  100k 0:00:12 [7.99k/s] [                                <=>                                                                                            ]
+```
+
+### The Gopher way: datagen
+In order to use it you need, nothing!!
+```
+usage: datagen [-h] [-n NUMBER] [-l LENGTH] [-j JITTERLEN] [-r RATE] [-f JITTERRATE]
+
+optional arguments:
+  -h, --help               show this help message and exit
+  -n NUMBER                number of records (default: 10)
+  -l LENGTH                record length (default: 100)
+  -j JITTERLEN             jitter in the record length (default: 0)
+  -r RATE                  record rate in records per second (default: 1)
+  -f JITTERRATE            jitter in the record rate (default: 0)
 ```
 
 ## Background: What problem is datagen trying to solve?
