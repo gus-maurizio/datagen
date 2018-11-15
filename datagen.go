@@ -11,9 +11,9 @@ import "flag"
 func high_resolution_sleep(duration float64) {
 	// duration is expressed in seconds so needs conversion
 	nanoduration := int64(duration * 1e9)
-	var time_sleep0 int64 = 4900
+	var time_sleep0 int64 = 4000 // 4900
 	end := time.Now().UnixNano() + nanoduration - time_sleep0
-	if duration > 0.02 {
+	if duration >= 0.02 {
 		time.Sleep(time.Duration(nanoduration))
 	}
 	for time.Now().UnixNano() < end {
@@ -40,12 +40,11 @@ func main() {
 	ratePtr  := flag.Float64("r", 100.0, "message rate")
 	jratePtr := flag.Float64("f", 0.0, "message rate jitter (default 0.00)")
 	flag.Parse()
-
 	fmt.Fprintf(os.Stderr,"%s will generate %d records of %d [+/- %d] bytes at %.2f [+/- %.2f] rps\n",
 			myName, *numPtr, *lenPtr, *jlenPtr, *ratePtr, *jratePtr)
 
 	formatlen  := *lenPtr - 1
-	formatlenj := formatlen 
+	formatlenj := formatlen
 	formatstr  := "%0" + strconv.Itoa(formatlenj) + "d"
 	waittime   := 1.00 / *ratePtr
 	bytecount  := 0
