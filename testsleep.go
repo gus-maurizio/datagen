@@ -16,7 +16,7 @@ func main() {
 		}
 		for i := 0; i < 5; i++ {
 			start := time.Now()
-			time.Sleep(0 * time.Microsecond)
+			time.Sleep(1 * time.Microsecond)
 			stop  := time.Now()
 			fmt.Printf("    time.Now() monotonic resolution:  %5.0fus\n", stop.Sub(start).Seconds()*1e6)
 		}

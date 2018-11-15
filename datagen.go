@@ -18,6 +18,7 @@ func high_resolution_sleep(duration float64) {
 	}
 	for time.Now().UnixNano() < end {
 		time.Sleep(0)
+        //time.Sleep(100 * time.Microsecond)
 	}
 }
 
