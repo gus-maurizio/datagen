@@ -4,7 +4,6 @@ package main
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
 */
 import "C"
 
@@ -12,6 +11,7 @@ import "fmt"
 import "time"
 import "strconv"
 import "math"
+import "math/rand"
 import "strings"
 import "os"
 import "flag"
@@ -19,7 +19,6 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
-
 
 
 func hr_sleep_microsecond(micros int) {
@@ -47,6 +46,10 @@ func hr_sleep_microsecond(micros int) {
         }
 }
 
+func random(min, max int) int {
+	return rand.Intn(max - min) + min
+}
+
 func progress(count uint32, total uint32, status string) {
 	var bar_len uint32 = 50
 	var filled_len int
@@ -59,6 +62,7 @@ func progress(count uint32, total uint32, status string) {
 
 func main() {
 	myName   := os.Args[0]
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	lenPtr   := flag.Int("l", 1024, "record length")
 	numPtr   := flag.Int("n", 100,  "number of records")
@@ -67,18 +71,21 @@ func main() {
 	ratePtr  := flag.Float64("r", 100.0, "message rate")
 	jratePtr := flag.Float64("f", 0.0, "message rate jitter (default 0.00)")
 	flag.Parse()
-	//waittime   := 1.00 / *ratePtr
-	waitperrec := int(1000000 / *ratePtr)
-	waitmicro  := waitperrec * *burstPtr
-	waitmilli  := float64(waitmicro) / 1000.0
+	
+	waitperrec    := int(1000000 / *ratePtr)
+	waitperrecmin := int(1000000 / (*ratePtr + *jratePtr))
+	waitperrecmax := int(1000000 / (*ratePtr - *jratePtr))
+	waitmicro     := waitperrec * *burstPtr
+	waitmilli     := float64(waitmicro) / 1000.0
 
 	p := message.NewPrinter(language.English)
 	p.Fprintf(os.Stderr,"%s will generate %d records of %d [+/- %d] bytes at %.2f [+/- %.2f] rps (sending %d record together and waiting %d usec [%.2f msec] between bursts)\n",
 		myName, *numPtr, *lenPtr, *jlenPtr, *ratePtr, *jratePtr, *burstPtr, waitmicro, waitmilli)
-
+	if *jratePtr > 0.0 {
+		p.Fprintf(os.Stderr,"%s jitter microseconds [%d - %d]\n", myName, waitperrecmin, waitperrecmax)
+	}
 	formatlen  := *lenPtr - 1
 	formatlenj := formatlen
-	//formatstr  := "%0" + strconv.Itoa(formatlenj) + "d"
 	formatstr  := "%0" + strconv.Itoa(formatlenj) + "f"
 	bytecount  := 0
 	progress_freq := 5
@@ -88,11 +95,13 @@ func main() {
 	for i <= *numPtr {
 		l := 1
 		for l <= *burstPtr && i <= *numPtr {
+			if *jlenPtr != 0 {
+				formatlenj = random(formatlen - *jlenPtr, formatlen + *jlenPtr) 
+				formatstr  = "%0" + strconv.Itoa(formatlenj) + "f"
+			}
 			time_now := time.Now().UnixNano()
-			//fmt.Printf(formatstr + "\n",time_now)
 			fmt.Printf(formatstr + "\n",float64(time_now)/1e9)
 			bytecount += formatlenj + 1
-			//if l > 1 {i++}
                         if i % progress_freq == 0 {
                                 status := p.Sprintf("%d @%.2f rps. Bytes: %d <%.2f bytes> ",i,float64(i)*1e9/float64(time_now-time_start),bytecount,float64(bytecount)/float64(i))
                                 progress(uint32(i), uint32(*numPtr), status)
@@ -100,8 +109,12 @@ func main() {
 			i++
 			l++
 		}
-		//high_resolution_sleep(waittime)
-		hr_sleep_microsecond(waitmicro)
+		if *jratePtr > 0.00 {
+			hr_sleep_microsecond(random( int(float64(1e6 * *burstPtr) / (*ratePtr + *jratePtr)) , int(float64(1e6 * *burstPtr) / (*ratePtr - *jratePtr)) ))
+			
+		} else {
+			hr_sleep_microsecond(waitmicro)
+		}
 	}
 	time_now := time.Now().UnixNano()
 	status := p.Sprintf("%d @%.2f rps. Bytes: %d <%.2f bytes>\n",*numPtr,float64(*numPtr)*1e9/float64(time_now-time_start),bytecount,float64(bytecount)/float64(*numPtr))
