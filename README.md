@@ -76,21 +76,39 @@ datagen will generate 100,000 records of 1,536 [+/- 0]  bytes at 9,000.00 [+/- 0
 datagen ended
  100k 0:00:12 [7.99k/s] [                                <=>                                                                                            ]
 ```
-
+It is worth noting that the lack of precision in the timer libraries drives single core CPU utilization at 100% while this program runs for all generation rates higher than 50 messages per second. In general this is not a concern, but if that is the case we recommend using the Go version.
 ### The Gopher way: datagen
-In order to use it you need, nothing!!
+In order to use it you need, Go! And you need to download two modules:
+- go get golang.org/x/text/language
+- go get golang.org/x/text/message
+You can compile with `go build datagen.go`. Mac users might need to install XCode and XCode command line extensions to be able to compile the OS time routines.
+#### Mac OS X users
+You need XCode tools and creating /usr/include. Proceed as below (YMMV)
+```
+xcode-select --install
+sudo ln -sf /Applications/Xcode.app//Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include /usr/include
+go build datagen.go
+```
+#### Gopher datagen
 ```
 usage: datagen [-h] [-n NUMBER] [-l LENGTH] [-j JITTERLEN] [-r RATE] [-f JITTERRATE]
 
 optional arguments:
-  -h, --help               show this help message and exit
-  -n NUMBER                number of records (default: 10)
-  -l LENGTH                record length (default: 100)
-  -j JITTERLEN             jitter in the record length (default: 0)
-  -r RATE                  record rate in records per second (default: 1)
-  -f JITTERRATE            jitter in the record rate (default: 0)
-```
+        -b int
+              burst records sent together (default 1)
+        -f float
+              message rate jitter (default 0.00)
+        -j int
+              jitter length (default 0)
+        -l int
+              record length (default 1024)
+        -n int
+              number of records (default 100)
+        -r float
+              message rate (default 100)
 
+```
+Gopher datagen introduces several performance improvements (does use low level OS usleep routine), and adds the option of *bursting* records. Using the parameter -b, you can select the amount of records that will be sent in a burst (all without delay) before waiting enough time to match the desired rate (precision is always approximate, if you want better precision use the python version, but pay the CPU tax).
 ## Background: What problem is datagen trying to solve?
 Test data generation is an important part of the tasks a software engineer needs to face.
 While there are many open source and commercial tools available that solve many of the
