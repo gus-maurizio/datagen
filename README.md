@@ -81,6 +81,7 @@ It is worth noting that the lack of precision in the timer libraries drives sing
 In order to use it you need, Go! And you need to download two modules:
 - go get golang.org/x/text/language
 - go get golang.org/x/text/message
+
 You can compile with `go build datagen.go`. Mac users might need to install XCode and XCode command line extensions to be able to compile the OS time routines.
 #### Mac OS X users
 You need XCode tools and creating /usr/include. Proceed as below (YMMV)
