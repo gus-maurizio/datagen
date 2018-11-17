@@ -78,7 +78,8 @@ func main() {
 
 	formatlen  := *lenPtr - 1
 	formatlenj := formatlen
-	formatstr  := "%0" + strconv.Itoa(formatlenj) + "d"
+	//formatstr  := "%0" + strconv.Itoa(formatlenj) + "d"
+	formatstr  := "%0" + strconv.Itoa(formatlenj) + "f"
 	bytecount  := 0
 	progress_freq := 5
 	if *numPtr / 50 > progress_freq {progress_freq = *numPtr / 50}
@@ -88,7 +89,8 @@ func main() {
 		l := 1
 		for l <= *burstPtr && i <= *numPtr {
 			time_now := time.Now().UnixNano()
-			fmt.Printf(formatstr + "\n",time_now)
+			//fmt.Printf(formatstr + "\n",time_now)
+			fmt.Printf(formatstr + "\n",float64(time_now)/1e9)
 			bytecount += formatlenj + 1
 			//if l > 1 {i++}
                         if i % progress_freq == 0 {
