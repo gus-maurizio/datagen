@@ -15,6 +15,11 @@ import "math"
 import "strings"
 import "os"
 import "flag"
+import (
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
+)
+
 
 
 func hr_sleep_microsecond(micros int) {
@@ -66,7 +71,9 @@ func main() {
 	waitperrec := int(1000000 / *ratePtr)
 	waitmicro  := waitperrec * *burstPtr
 	waitmilli  := float64(waitmicro) / 1000.0
-	fmt.Fprintf(os.Stderr,"%s will generate %d records of %d [+/- %d] bytes at %.2f [+/- %.2f] rps (sending %d record together and waiting %d usec [%.2f msec] between bursts)\n",
+
+	p := message.NewPrinter(language.English)
+	p.Fprintf(os.Stderr,"%s will generate %d records of %d [+/- %d] bytes at %.2f [+/- %.2f] rps (sending %d record together and waiting %d usec [%.2f msec] between bursts)\n",
 		myName, *numPtr, *lenPtr, *jlenPtr, *ratePtr, *jratePtr, *burstPtr, waitmicro, waitmilli)
 
 	formatlen  := *lenPtr - 1
@@ -85,7 +92,7 @@ func main() {
 			bytecount += formatlenj + 1
 			//if l > 1 {i++}
                         if i % progress_freq == 0 {
-                                status := fmt.Sprintf("%d @%.2f rps. Bytes: %d <%.2f bytes> ",i,float64(i)*1e9/float64(time_now-time_start),bytecount,float64(bytecount)/float64(i))
+                                status := p.Sprintf("%d @%.2f rps. Bytes: %d <%.2f bytes> ",i,float64(i)*1e9/float64(time_now-time_start),bytecount,float64(bytecount)/float64(i))
                                 progress(uint32(i), uint32(*numPtr), status)
                         }
 			i++
@@ -95,6 +102,6 @@ func main() {
 		hr_sleep_microsecond(waitmicro)
 	}
 	time_now := time.Now().UnixNano()
-	status := fmt.Sprintf("%d @%.2f rps. Bytes: %d <%.2f bytes>\n",*numPtr,float64(*numPtr)*1e9/float64(time_now-time_start),bytecount,float64(bytecount)/float64(*numPtr))
+	status := p.Sprintf("%d @%.2f rps. Bytes: %d <%.2f bytes>\n",*numPtr,float64(*numPtr)*1e9/float64(time_now-time_start),bytecount,float64(bytecount)/float64(*numPtr))
 	progress(uint32(*numPtr), uint32(*numPtr), status)
 }
